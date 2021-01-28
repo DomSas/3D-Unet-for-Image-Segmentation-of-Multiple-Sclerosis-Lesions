@@ -34,7 +34,7 @@ def dice_coef_loss(y_true, y_pred):
     return -dice_coef(y_true, y_pred)
 
 
-def get_model(img_rows=192, img_cols=192, img_depth=192):
+def get_model(img_rows=96, img_cols=96, img_depth=96):
     
     inputs = Input((img_rows, img_cols, img_depth, 1))
     conv1 = Conv3D(32, (3, 3, 3), activation='relu', padding='same')(inputs)
