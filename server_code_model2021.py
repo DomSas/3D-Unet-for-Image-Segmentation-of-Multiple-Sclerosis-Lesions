@@ -57,22 +57,22 @@ def get_model(img_rows=96, img_cols=96, img_depth=96):
     conv5 = Conv3D(512, (3, 3, 3), activation='relu', padding='same')(conv5)
 
     up6 = concatenate([Conv3DTranspose(256, (2, 2, 2), strides=(
-        2, 2, 2), padding='same')(conv5), conv4], axis=3)
+        2, 2, 2), padding='same')(conv5), conv4], axis=-1)
     conv6 = Conv3D(256, (3, 3, 3), activation='relu', padding='same')(up6)
     conv6 = Conv3D(256, (3, 3, 3), activation='relu', padding='same')(conv6)
 
     up7 = concatenate([Conv3DTranspose(128, (2, 2, 2), strides=(
-        2, 2, 2), padding='same')(conv6), conv3], axis=3)
+        2, 2, 2), padding='same')(conv6), conv3], axis=-1)
     conv7 = Conv3D(128, (3, 3, 3), activation='relu', padding='same')(up7)
     conv7 = Conv3D(128, (3, 3, 3), activation='relu', padding='same')(conv7)
 
     up8 = concatenate([Conv3DTranspose(64, (2, 2, 2), strides=(
-        2, 2, 2), padding='same')(conv7), conv2], axis=3)
+        2, 2, 2), padding='same')(conv7), conv2], axis=-1)
     conv8 = Conv3D(64, (3, 3, 3), activation='relu', padding='same')(up8)
     conv8 = Conv3D(64, (3, 3, 3), activation='relu', padding='same')(conv8)
 
     up9 = concatenate([Conv3DTranspose(32, (2, 2, 2), strides=(
-        2, 2, 2), padding='same')(conv8), conv1], axis=3)
+        2, 2, 2), padding='same')(conv8), conv1], axis=-1)
     conv9 = Conv3D(32, (3, 3, 3), activation='relu', padding='same')(up9)
     conv9 = Conv3D(32, (3, 3, 3), activation='relu', padding='same')(conv9)
 
@@ -120,18 +120,17 @@ def get_model_simple(img_rows=192, img_cols=192, img_depth=192):
     return model
 
 
-def train():
+def train_and_predict():
     print('I am training...')
 
     model = get_model()
     
     model_checkpoint = ModelCheckpoint('weights2021.h5', monitor='val_loss', save_best_only=True)
     
-    history = model.fit(imgs_train, masks_train, batch_size=32, epochs=5, verbose=1, shuffle=True, validation_split=0.2, callbacks=[model_checkpoint])
+    history = model.fit(imgs_train, masks_train, batch_size=5, epochs=100, verbose=1, shuffle=True, validation_split=0.2, callbacks=[model_checkpoint])
     print('I finished training...')
 
 
-def predict():
     print('I am predicting...')
     
     model.load_weights('weights2021.h5')
@@ -140,7 +139,6 @@ def predict():
     np.save('imgs_mask_test2021.npy', imgs_mask_test)
     print('I finished predicting...')
 
-def save_graph_results():
     print('I am saving graph results...')
     
     plt.plot(history.history['dice_coef'])
@@ -155,8 +153,6 @@ def save_graph_results():
 
 
 if __name__ == '__main__':
-    train()
-    predict()
-    save_graph_results()
+    train_and_predict()
     
     
