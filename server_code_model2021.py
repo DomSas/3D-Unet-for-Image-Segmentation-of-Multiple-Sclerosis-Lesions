@@ -17,9 +17,9 @@ from keras import backend as K
 import matplotlib.pyplot as plt
 from keras.callbacks import History
 
-imgs_train = np.load('imgs_train2021.npy')
-masks_train = np.load('masks_train2021.npy')
-imgs_test = np.load('imgs_test2021.npy')
+imgs_train = np.load('imgs_train2021mar_3D.npy')
+masks_train = np.load('imgs_train2021mar_3D.npy')
+imgs_test = np.load('imgs_train2021mar_3D.npy')
 
 smooth = 1
 
